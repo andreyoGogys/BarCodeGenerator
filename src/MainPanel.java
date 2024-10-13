@@ -8,6 +8,8 @@ import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.sql.SQLException;
+
 
 public class MainPanel {
     
@@ -34,8 +36,18 @@ public class MainPanel {
         btn.addActionListener(new ActionListener(){
             public void actionPerformed(ActionEvent e){
                 BarCode.code128(textField.getText());
+                String code = textField.getText();
                 textField.setText("");
                 lable_img.setIcon(setImage(BarCode.width_last_barcode,BarCode.height_last_barcode,BarCode.last_barcode));
+                DataBase dataBase = new DataBase();
+                try {
+                    //dataBase.WriteDB(code, BarCode.last_barcode);
+                    dataBase.CloseDB();
+                } catch (ClassNotFoundException e1) {
+                    e1.printStackTrace();
+                } catch (SQLException e1) {
+                    e1.printStackTrace();
+                }
             }
         });
 
