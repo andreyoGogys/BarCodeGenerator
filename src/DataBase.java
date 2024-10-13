@@ -1,4 +1,4 @@
-//подключение к базе данных. покачто не работает
+//подключение к базе данных.
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
