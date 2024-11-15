@@ -30,14 +30,19 @@ public class Code128Decoder {
             if(code.charAt(i)=='1')a++;
             else{
                 if(a==0) continue;
-                patternblack+=String.valueOf(a)+".";
+                patternblack+=String.valueOf(a)+";";
                 a=0;
             }
         }
         code="";
-        int minimalbar=patternblack.charAt(2) - 0;
+        String[] pattern = patternblack.split(";");
+        System.out.println(pattern.length);
+        System.out.println("patternblack:"+patternblack);
+        int minimalbar=Integer.parseInt(pattern[1]);
+        System.out.println("minimalbar:"+minimalbar);
 
-        for(int i =0;i<image_width;i+=minimalbar-48){
+        for(int i =0;i<image_width;i+=minimalbar){
+            if(i>=image_width)break;
             int rgb = image.getRGB(i,image.getHeight()/2) & 0xffffff;
             String num;
             num = rgb == 0xffffff ? "0" : "1";
