@@ -28,7 +28,10 @@ public class GUI {
     }
     private static ImageIcon setImage(BufferedImage bimg){
         try {
-            Image image = bimg.getScaledInstance(bimg.getWidth(),bimg.getHeight(),Image.SCALE_DEFAULT);
+            int widht = bimg.getWidth()>=210?210:bimg.getWidth();;
+            int height = bimg.getHeight()>=70?70:bimg.getHeight();
+
+            Image image = bimg.getScaledInstance(widht,height,Image.SCALE_DEFAULT);
             ImageIcon icon = new ImageIcon(image);
             return icon;
         } catch (Exception e) {
