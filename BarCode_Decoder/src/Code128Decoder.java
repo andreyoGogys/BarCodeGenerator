@@ -5,13 +5,6 @@ import java.io.IOException;
 
 public class Code128Decoder {
 
-    private static final String[] CODE_128_PATTERNS = {
-        "11011001100", "11001101100", "11001100110", "10010011000",
-        "10010001100", "10001001100", "10011001000", "10011000100",
-        "10001100100", "11001001000", "11001000100", "11000100100",
-        "10110011100", "10011011100", "10011001110", "10111001100"
-    };
-
     public static String decodeBarcode(String imagePath) throws IOException {
         BufferedImage image = ImageIO.read(new File(imagePath));
         String bincode = getBinCode(image);
@@ -23,12 +16,34 @@ public class Code128Decoder {
 
         int image_width = image.getWidth();
         String code = "";
-        for(int i =0;i<image_width;i+=2){
+        for(int i =0;i<image_width;i++){
             int rgb = image.getRGB(i,image.getHeight()/2) & 0xffffff;
             String num;
             num = rgb == 0xffffff ? "0" : "1";
             code+=num;
         }
+
+        String patternblack="";
+        int a=0;
+
+        for(int i = 0;i<code.length();i++){
+            if(code.charAt(i)=='1')a++;
+            else{
+                if(a==0) continue;
+                patternblack+=String.valueOf(a)+".";
+                a=0;
+            }
+        }
+        code="";
+        int minimalbar=patternblack.charAt(2) - 0;
+
+        for(int i =0;i<image_width;i+=minimalbar-48){
+            int rgb = image.getRGB(i,image.getHeight()/2) & 0xffffff;
+            String num;
+            num = rgb == 0xffffff ? "0" : "1";
+            code+=num;
+        }
+
         System.out.println("code:"+code);
         return getCode(code);
     }
@@ -38,9 +53,8 @@ public class Code128Decoder {
         int chunkSize = 11;
         String code = "";
 
-        // Разделение строки на части по 6 символов
         String[] chunks = splitStringIntoChunks(bincode, chunkSize);
-        //                        A               B           C
+        //                         A             B             C
         String[] patterns = {"11010000100","11010010000","11010011100"};
         char type=' ';
         
